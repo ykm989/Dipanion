@@ -6,7 +6,7 @@ public class BasicMove : MonoBehaviour
 {
     public float movePower = 1f;//이동할때 가할 힘의 값
     public float jumpPower = 1f;//점프할때 가할 힘의 값
-    public float speed = 10;
+    public float speed = 10f;
 
     Rigidbody2D rigid; //Rigidbody2D 컴포넌트를 가져와서 상속할 변수?
 
@@ -20,6 +20,7 @@ public class BasicMove : MonoBehaviour
 
     void Update()
     {
+        
         if (Input.GetButtonDown("Jump"))//GetButton() 메소드를 누르고 있는 상태, GetButtonDown()해당 버튼이 눌릴 때의 상태.GetButtonUP()은 해당이 떨어질때 상태
         {
             isJumping = true;
@@ -31,7 +32,33 @@ public class BasicMove : MonoBehaviour
         move();
         jump();
     }
-
+    bool OutCheck()//화면 밖으로 나가는지 아닌지 반환
+    {
+        Vector3 vp = Camera.main.WorldToViewportPoint(transform.position);//현 오브젝트의 좌표를 뷰포트좌표로 치환
+        bool tf = false;
+        if (vp.x < 0f)//왼쪽 화면 밖으로 나갈 시
+        {
+            vp.x = 0f;
+            tf = true;
+        }
+        if (vp.x > 1f)//우측 화면 밖으로 나갈 시
+        {
+            vp.x = 0f;
+            tf = true;
+        }
+        if (vp.y > 1f)//상단 화면 밖으로 나갈 시
+        {
+            vp.y = 0f;
+            tf = true;
+        }
+        if (vp.y < 0f)//하단 화면 밖으로 나갈 시
+        {
+            vp.y = 0f;
+            tf = true;
+        }
+        
+        return tf;
+    }
     void move()
     {
         Vector3 moveVelocity = Vector3.zero;
