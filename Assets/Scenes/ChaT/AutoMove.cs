@@ -32,25 +32,21 @@ public class AutoMove : MonoBehaviour
         Vector3 vp = Camera.main.WorldToViewportPoint(this.transform.position);
         if (vp.x < 0f)//왼쪽 화면 밖
         {
-            Debug.Log(1);
             direction.x *= -1f;
             direction.y = Random.Range(-1.0f, 1.0f);
         }
         else if (vp.x > 1f)//우측 화면 밖
         {
-            Debug.Log(2);
             direction.x *= -1f;
             direction.y = Random.Range(-1.0f, 1.0f);
         }
         else if (vp.y < 0f)//하단 화면 밖
         {
-            Debug.Log(3);
             direction.x = Random.Range(-1.0f, 1.0f);
             direction.y *= -1f;
         }
         else if (vp.y > 1f)
         {
-            Debug.Log(4);
             direction.x = Random.Range(-1.0f, 1.0f);
             direction.y *= -1f;
         }
