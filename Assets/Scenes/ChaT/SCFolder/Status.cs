@@ -1,15 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;//UGUI의 기능을 스트립트에서 제하기 위해 필요한 네임스페이스
 
 public class Status : MonoBehaviour
 {
-    public GameObject prfHpbar;
-    public GameObject canvas;
+    private float lerpSpeed;
 
-    RectTransform hpBar;
-
-    public float height = 1.7f;
+    private Image content;
 
     private float chamaxhp;//캐릭터 HP 최대치
     private float chacurhp;//캐릭터 HP 현재
@@ -25,6 +23,8 @@ public class Status : MonoBehaviour
             if (value < 0) chacurhp = 0;
             else if (value > chamaxhp) chacurhp = chamaxhp;
             else chacurhp = value;
+
+            chafilhp = chacurhp / chamaxhp;
         }
     }
     private int str, dex, ints, sta, men;//힘,민첩,지능,체력,정신력
@@ -60,14 +60,37 @@ public class Status : MonoBehaviour
 
     void Start()
     {
-        hpBar = Instantiate(prfHpbar, canvas.transform).GetComponent<RectTransform>();
-        
+        content = GetComponent<Image>();
+        Initialize(100, 100);//처음 체력을 설정
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 _hpBarPos = Camera.main.WorldToScreenPoint(new Vector3(transform.position.x, transform.position.y + height, 0));
-        hpBar.position = _hpBarPos;
+        
+        if(chafilhp != content.fillAmount)
+        {
+            Debug.Log("볼 값 : " + Mathf.Lerp(content.fillAmount, chafilhp, Time.deltaTime * lerpSpeed));
+            content.fillAmount = Mathf.Lerp(content.fillAmount, chafilhp, Time.deltaTime * lerpSpeed);//선형보간법으로 값 수정을 부드럽게 하고자 할 때 사용
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            currenthpget -= 10;//테스트를 위해 누르면 피 달게 설정
+            Debug.Log('i');
+            Debug.Log(currenthpget);
+        }
+        if (Input.GetMouseButtonDown(1)) currenthpget += 10;//테스트를 위해 누르면 피 차게 설정
+    }
+    
+    public void Initialize(float currentValue, float maxValue)//HP 설정
+    {
+        chamaxhp = maxValue;
+        currenthpget = currentValue;
+        chafilhp = chacurhp / chamaxhp;
+        //Debug.Log(chafilhp);
+        //Debug.Log(chacurhp);
+        //Debug.Log(chamaxhp);
+
     }
 }
