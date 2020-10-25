@@ -5,13 +5,13 @@ using UnityEngine.UI;//UGUI의 기능을 스트립트에서 제하기 위해 필
 
 public class Status : MonoBehaviour
 {
-    private float lerpSpeed;
+    //private float lerpSpeed = 0.05f;
 
     private Image content;
 
     private float chamaxhp;//캐릭터 HP 최대치
     private float chacurhp;//캐릭터 HP 현재
-    private float chafilhp;//캐릭터 HP MAX/Current 계산을 저장하기 위한 변수
+    public float chafilhp;//캐릭터 HP MAX/Current 계산을 저장하기 위한 변수
     public float currenthpget//hp값 캡슐화
     {
         get//변수 = Status.currenthpget
@@ -20,9 +20,9 @@ public class Status : MonoBehaviour
         }
         set//Status.currenthpget = 값//0미만이나 max값 넘어서 부르는거 거루기 위함
         {
-            if (value < 0) chacurhp = 0;
-            else if (value > chamaxhp) chacurhp = chamaxhp;
-            else chacurhp = value;
+            if ((chacurhp + value) < 0) chacurhp = 0;
+            else if ((chacurhp + value) > chamaxhp) chacurhp = chamaxhp;
+            else chacurhp += value;
 
             chafilhp = chacurhp / chamaxhp;
         }
@@ -60,27 +60,14 @@ public class Status : MonoBehaviour
 
     void Start()
     {
-        content = GetComponent<Image>();
         Initialize(100, 100);//처음 체력을 설정
     }
 
-    // Update is called once per frame
+  
     void Update()
     {
-        
-        if(chafilhp != content.fillAmount)
-        {
-            Debug.Log("볼 값 : " + Mathf.Lerp(content.fillAmount, chafilhp, Time.deltaTime * lerpSpeed));
-            content.fillAmount = Mathf.Lerp(content.fillAmount, chafilhp, Time.deltaTime * lerpSpeed);//선형보간법으로 값 수정을 부드럽게 하고자 할 때 사용
-        }
-
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            currenthpget -= 10;//테스트를 위해 누르면 피 달게 설정
-            Debug.Log('i');
-            Debug.Log(currenthpget);
-        }
-        if (Input.GetMouseButtonDown(1)) currenthpget += 10;//테스트를 위해 누르면 피 차게 설정
+        if (Input.GetKeyDown(KeyCode.I)) currenthpget = -10;//테스트를 위해 누르면 피 달게 설정
+        if (Input.GetKeyDown(KeyCode.O)) currenthpget = 10;//테스트를 위해 누르면 피 차게 설정
     }
     
     public void Initialize(float currentValue, float maxValue)//HP 설정
@@ -88,9 +75,6 @@ public class Status : MonoBehaviour
         chamaxhp = maxValue;
         currenthpget = currentValue;
         chafilhp = chacurhp / chamaxhp;
-        //Debug.Log(chafilhp);
-        //Debug.Log(chacurhp);
-        //Debug.Log(chamaxhp);
 
     }
 }
