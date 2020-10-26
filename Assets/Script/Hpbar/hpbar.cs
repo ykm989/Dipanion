@@ -8,17 +8,25 @@ public class hpbar : MonoBehaviour
     private float lerpSpeed;
     Status st;
     private Image content;
+    GameObject dipanion;
+
+    bool showhpbar = true;
+    //Camera.main.WorldToViewportPoint(dipanion.transform.position);
     // Start is called before the first frame update
     void Start()
     {
         content = GetComponent<Image>();
-        GameObject dipanion = GameObject.Find("Dipanion");
+        dipanion = GameObject.Find("Dipanion");
         st = dipanion.GetComponent<Status>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (showhpbar)
+        {
+            this.transform.position = dipanion.transform.position;
+        }
         if (st.chafilhp != content.fillAmount)
         {
             //Debug.Log("현재 피 : " + currenthpget + "fill : " + chafilhp);
