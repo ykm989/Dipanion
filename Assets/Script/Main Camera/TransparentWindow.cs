@@ -39,30 +39,32 @@ public class TransparentWindow : MonoBehaviour
 	/////////////////////
 	
 	[DllImport("user32.dll")]
-	static extern IntPtr GetActiveWindow();
+	static extern IntPtr GetActiveWindow();//아마도 handle을 가지고 있는 윈도우를 찾아 주는 듯
 	
 	[DllImport("user32.dll")]
-	static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
+	static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);//윈도우의 속성값을 편지 하는 함수
 
-	[DllImport("user32.dll", EntryPoint = "SetLayeredWindowAttributes")]
+	[DllImport("user32.dll", EntryPoint = "SetLayeredWindowAttributes")]//user32.dll 중 SetLayeredWindowAttributes만 가지고 오는 함수 인듯
 	static extern int SetLayeredWindowAttributes(IntPtr hwnd, int crKey, byte bAlpha, int dwFlags);
 
 	[DllImport("user32.dll", EntryPoint = "GetWindowRect")]
-	static extern bool GetWindowRect(IntPtr hwnd, out Rectangle rect);
-	
-	[DllImport("user32.dll")]
+	static extern bool GetWindowRect(IntPtr hwnd, out Rectangle rect);//handle이 가지고 있는 윈도우 영역을 표시 x, y, height, width 가 아닌 left, right, top, bottom 으로 나옴 만약 left 가 100, right 가 200 이라면 x 가 100 width 가 100 이랑 같은 거로 보면된다
+	//out은 일종의 함수안에서 함수밖에 선언된 변수의 값을 변경하기 위해서 있는거 같아 우리가 C에서 포인터값 넘겨서 수정하던거 생각하면 편할 듯
+		[DllImport("user32.dll")]
 	static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
-
+	//이건 어려운 부분이라 알아서 찾아 볼 것
 	[DllImportAttribute("user32.dll")]
 	static extern bool ReleaseCapture();
-
+	//길어서 아래에 적음 마우스 캡처를 푼다. 마우스를 캡처한 윈도우는 커서의 위치에 상관없이 모든 마우스 메시지를 받는데 이 함수로 캡처를 풀면 이상태가 종료되며 마우스 메시지는 커서 아래쪽에 있는 윈도우로 전달된다. SetCapture로 마우스를 캡처한 윈도우는 필요한 동작을 완료한 후 반드시 이 함수를 호출하여 캡처를 풀어 주어야 한다.
+	//SetCapture 마우스 버튼의 누름, 이동, 뗌 등의 마우스 메시지는 보통 커서 바로 아래쪽에 있는 윈도우로 전달된다. 커서가 영역밖을 벗어나도 계속적으로 마우스 메시지를 받아야 하는 경우도 있다.
 	[DllImport("user32.dll", EntryPoint = "SetWindowPos")]
 	static extern int SetWindowPos(IntPtr hwnd, int hwndInsertAfter, int x, int y, int cx, int cy, int uFlags);
-
+	//이 함수는 윈도우의 위치, 크기, Z순서를 동시에 또는 일부만 변경할 때 사용된다. 이 함수는 Z순서를 변경하기 위한 목적으로, 특히 항상 위 속성을 토글하기 위한 용도로 많이 사용되는데 두번째 인수에 HWND_(NO)TOPMOST를 줌으로써 이 속성을 토글할 수 있다. 이 함수로 항상 위 속성을 설정하면 이 윈도우에 소유된 윈도우도 항상 위 속성을 같이 가지게 된다.
+	//ShowWIndow는 윈도우의 보이기 상태를 지정한다.
 	[DllImport("Dwmapi.dll")]
 	static extern uint DwmExtendFrameIntoClientArea(IntPtr hWnd, ref Rectangle margins);
-
-	const int GWL_STYLE = -16;
+	//첫번째 인자는 윈도우의 핸들이며 두번쨰 인자는 효과를 줄 영역을 의미 AeroGlass 효과를 주는 함수 반투명한 윈도우 창의 형태를 만들어주는것
+	const int GWL_STYLE = -16;//WPF인듯
 	const uint WS_POPUP = 0x80000000;
 	const uint WS_VISIBLE = 0x10000000;
 	const int HWND_TOPMOST = -1;
@@ -180,3 +182,6 @@ public class TransparentWindow : MonoBehaviour
 		public int Bottom;
 	}
 }
+
+//별도 파일로 win32에대한 공부 내용을 정리하도록 하겠다.
+//SetMapMode와 논리 좌표: 윈도우즈 내부에서 사용되는 좌표를 말한다. 물리 좌표는 실제 화면에 출력되는 좌표이며 픽셀 단위를 사용한다. 모니터의 물리적인 픽셀 단위를 사용하므로 물리 좌표는 그 위치가 정해져 있다.
