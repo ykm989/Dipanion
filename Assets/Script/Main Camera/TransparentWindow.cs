@@ -5,30 +5,32 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
-
-[RequireComponent(typeof(Camera))]
+using Debug = UnityEngine.Debug; //디버깅?
+/// <summary>
+/// 이 시벌 제목부터 투명 윈도우 잖아? 투명해 지겠지
+/// </summary>
+[RequireComponent(typeof(Camera))]//카메라 컴포넌트 추가
 public class TransparentWindow : MonoBehaviour
-{
+{//이하 번역은 파파고다.
 	public static TransparentWindow Main = null;
-	public static Camera Camera = null;	//Used instead of Camera.main
+	public static Camera Camera = null;	//Used instead of Camera.main 메인 카메라 치워버림
+	//Tooltip은 변수에 대한 설명을 다는 것
+	[Tooltip("What GameObject layers should trigger window focus when the mouse passes over objects?")] //마우스가 개체 위로 지나갈 때 어떤 게임 개체 레이어가 창 포커스를 트리거해야합니까?
+	[SerializeField] LayerMask clickLayerMask = ~0;//인스펙터창에서 접근 가능하게 하고자 함
 
-	[Tooltip("What GameObject layers should trigger window focus when the mouse passes over objects?")] //
-	[SerializeField] LayerMask clickLayerMask = ~0;
-
-	[Tooltip("Allows Input to be detected even when focus is lost")] //
+	[Tooltip("Allows Input to be detected even when focus is lost")] //포커스가 손실된 경우에도 입력을 감지할 수 있도록 허용
 	[SerializeField] bool useSystemInput = false;
 
-	[Tooltip("Should the window be fullscreen?")] //
+	[Tooltip("Should the window be fullscreen?")] //전체화면인가?
 	[SerializeField] bool fullscreen = true;
 
-	[Tooltip("Force the window to match ScreenResolution")] //
+	[Tooltip("Force the window to match ScreenResolution")] //윈도우가 화면 해상도와 일치하도록 강제 설정
 	[SerializeField] bool customResolution = true;
 
-	[Tooltip("Resolution the overlay should run at")] //
+	[Tooltip("Resolution the overlay should run at")] //오버레이가 실행되어야하는 해상도
 	[SerializeField] Vector2Int screenResolution = new Vector2Int(1280, 720);
 
-	[Tooltip("The framerate the overlay should try to run at")] //
+	[Tooltip("The framerate the overlay should try to run at")] //오버레이가 실행되어야하는 프레임 속도
 	[SerializeField] int targetFrameRate = 30;
 
 	

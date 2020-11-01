@@ -18,9 +18,9 @@ public class SystemInput
 	const int BUTTONDOWN = -32768;
 	const int BUTTONUP = 0; //Not sure if there's a specific buttonUp
 
-	[DllImport("user32.dll", EntryPoint = "SetCursorPos")]
-	[return: MarshalAs(UnmanagedType.Bool)]
-	private static extern bool SetCursorPos(int x, int y);
+	[DllImport("user32.dll", EntryPoint = "SetCursorPos")]//마우스 커서 좌표를 찾고 반환해주는 함수 인듯
+	[return: MarshalAs(UnmanagedType.Bool)]//MarshalAs 고정크기 배열이나 문자열을 설정하기 위해 쓰는 함수 UnmanagedType은 win32에서 쓰는 여러 비 시발 모르겠다. 여러 변수 종류를 포함한거임 무튼 이거는 bool인데 win32전용으로 만든거지 즉 쓰잘데기 없이 복잡할거 없이 걍 고정크기의 bool형태의 변수를 리턴한다는 건데
+	private static extern bool SetCursorPos(int x, int y);//마우스! 마우스!
 
 	[DllImport("user32.dll")]
 	[return: MarshalAs(UnmanagedType.Bool)]

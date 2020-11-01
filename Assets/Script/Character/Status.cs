@@ -68,6 +68,7 @@ public class Status : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.I)) currenthpget = -10;//테스트를 위해 누르면 피 달게 설정
         if (Input.GetKeyDown(KeyCode.O)) currenthpget = 10;//테스트를 위해 누르면 피 차게 설정
+        if (Input.GetMouseButton(0)) currenthpget = -10;
     }
     
     public void Initialize(float currentValue, float maxValue)//HP 설정
