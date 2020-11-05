@@ -21,6 +21,6 @@ public class testtext : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        testText.text = "패널 좌표 : " + this.transform.position + "\n마우스 좌표 : " + Input.mousePosition + "\n오브젝트 좌표 : " + dipanion.transform.position + "\nHP바 좌표 : " + hpbar.transform.position;
+        testText.text = "패널 좌표 : " + this.transform.position + "\n마우스 좌표 : " + Input.mousePosition + "\n오브젝트 좌표 : " + Camera.main.WorldToViewportPoint(dipanion.transform.position) + "\nHP바 좌표 : " + hpbar.transform.position;
     }
 }

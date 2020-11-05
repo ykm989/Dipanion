@@ -128,13 +128,13 @@ public class TransparentWindow : MonoBehaviour
 	bool FocusForInput()
 	{
 		EventSystem eventSystem = EventSystem.current;
-		if (eventSystem && eventSystem.IsPointerOverGameObject())
+		if (eventSystem && eventSystem.IsPointerOverGameObject())//IsPointerOverGameObject()는 UI에ㅐ 캐릭터가 가려져서 선택 안되는거 방지
 		{
 			return true;
 		}
 
-		Vector2 pos = Camera.ScreenToWorldPoint(Input.mousePosition);
-		return Physics2D.OverlapPoint(pos, clickLayerMask);
+		Vector2 pos = Camera.ScreenToWorldPoint(Input.mousePosition);//마우스 클릭 또는 손카락 터치에 의한 입력이 발생했을 때, ScreenToWorld
+		return Physics2D.OverlapPoint(pos, clickLayerMask);//이것도 클릭 관려ㅛㄴ
 	}
 
 	void SetClickThrough()
