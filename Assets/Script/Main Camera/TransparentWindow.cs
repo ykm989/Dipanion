@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;//EventSystem 이란 UI를 생성할 때와 같이 생성되는 것으로, UI 요소들을 손이나 마우스로 누를 때, 땔 때, 드래그할 때 등을 감지하는 것입니다.
+using UnityEngine.UI;//https://m.blog.naver.com/PostView.nhn?blogId=ocy1011&logNo=220761155376&proxyReferer=https:%2F%2Fwww.google.com%2F 13일날 보자
 using Debug = UnityEngine.Debug; //디버깅?
 /// <summary>
 /// 이 시벌 제목부터 투명 윈도우 잖아? 투명해 지겠지
@@ -15,10 +15,10 @@ public class TransparentWindow : MonoBehaviour
 	public static TransparentWindow Main = null;
 	public static Camera Camera = null;	//Used instead of Camera.main 메인 카메라 치워버림
 	//Tooltip은 변수에 대한 설명을 다는 것
-	[Tooltip("What GameObject layers should trigger window focus when the mouse passes over objects?")] //마우스가 개체 위로 지나갈 때 어떤 게임 개체 레이어가 창 포커스를 트리거해야합니까?
+	[Tooltip("마우스와 오브젝트가 겹치는지 확인할때 사용하는 변수로 layermask 한계치 설정")] //마우스가 개체 위로 지나갈 때 어떤 게임 개체 레이어가 창 포커스를 트리거해야합니까?
 	[SerializeField] LayerMask clickLayerMask = ~0;//인스펙터창에서 접근 가능하게 하고자 함
 
-	[Tooltip("Allows Input to be detected even when focus is lost")] //포커스가 손실된 경우에도 입력을 감지할 수 있도록 허용
+	[Tooltip("Allows Input to be detected even when focus is lost")] //비록 포커스를 잃었을 지라도 
 	[SerializeField] bool useSystemInput = false;
 
 	[Tooltip("Should the window be fullscreen?")] //전체화면인가?
@@ -28,21 +28,21 @@ public class TransparentWindow : MonoBehaviour
 	[SerializeField] bool customResolution = true;
 
 	[Tooltip("Resolution the overlay should run at")] //오버레이가 실행되어야하는 해상도
-	[SerializeField] Vector2Int screenResolution = new Vector2Int(1280, 720);
+	[SerializeField] Vector2Int screenResolution = new Vector2Int(2560, 1440);//요걸 1280720에서 25601440로 수정 테스트
 
 	[Tooltip("The framerate the overlay should try to run at")] //오버레이가 실행되어야하는 프레임 속도
 	[SerializeField] int targetFrameRate = 30;
 
 	
 	/////////////////////
-	//Windows DLL stuff//
+	//Windows DLL 넣는 것//
 	/////////////////////
 	
 	[DllImport("user32.dll")]
 	static extern IntPtr GetActiveWindow();//아마도 handle을 가지고 있는 윈도우를 찾아 주는 듯
 	
 	[DllImport("user32.dll")]
-	static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);//윈도우의 속성값을 편지 하는 함수
+	static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);//윈도우의 속성값을 편집 하는 함수
 
 	[DllImport("user32.dll", EntryPoint = "SetLayeredWindowAttributes")]//user32.dll 중 SetLayeredWindowAttributes만 가지고 오는 함수 인듯
 	static extern int SetLayeredWindowAttributes(IntPtr hwnd, int crKey, byte bAlpha, int dwFlags);
@@ -84,18 +84,18 @@ public class TransparentWindow : MonoBehaviour
 		Main = this;
 
 		Camera = GetComponent<Camera>();
-		Camera.backgroundColor = new Color();
-		Camera.clearFlags = CameraClearFlags.SolidColor;
+		Camera.backgroundColor = new Color();//남은 색 설정, 색 설정이 안됨
+		Camera.clearFlags = CameraClearFlags.SolidColor;//배경색으로 화면의 나머지 부분을 채웁니다.
 
 		if (fullscreen && !customResolution)
 		{
-			screenResolution = new Vector2Int(Screen.currentResolution.width, Screen.currentResolution.height);
+			screenResolution = new Vector2Int(Screen.currentResolution.width, Screen.currentResolution.height);//스크린 해상도 값을 전달
 		}
 		
 		Screen.SetResolution(screenResolution.x, screenResolution.y, fullscreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed);
-
-		Application.targetFrameRate = targetFrameRate;
-		Application.runInBackground = true;
+		//가로픽셀, 세로 픽셀, full screen 유무, 지원되는 해상도 지정
+		Application.targetFrameRate = targetFrameRate;//프레임 고정
+		Application.runInBackground = true;//백그라운드에서도 실행 된다.
 
 #if !UNITY_EDITOR
 		fWidth = screenResolution.x;
@@ -114,11 +114,11 @@ public class TransparentWindow : MonoBehaviour
 #endif
 	}
 
-	void Update()
+	void Update()//업데이트는 볼 거 없음
 	{
 		if (useSystemInput)
 		{
-			SystemInput.Process();
+			SystemInput.Process();//systemInput 스크립트에 Process라는 함수를 호출 대부분 진행된다.
 		}
 
 		SetClickThrough();
@@ -134,7 +134,7 @@ public class TransparentWindow : MonoBehaviour
 		}
 
 		Vector2 pos = Camera.ScreenToWorldPoint(Input.mousePosition);//마우스 클릭 또는 손카락 터치에 의한 입력이 발생했을 때, ScreenToWorld
-		return Physics2D.OverlapPoint(pos, clickLayerMask);//이것도 클릭 관려ㅛㄴ
+		return Physics2D.OverlapPoint(pos, clickLayerMask);//마우스 좌표와 특정 마스크와 겹치는지 확인
 	}
 
 	void SetClickThrough()
@@ -144,15 +144,15 @@ public class TransparentWindow : MonoBehaviour
 		//Get window position
 		GetWindowRect(hwnd, out windowRect);
 
-#if !UNITY_EDITOR
+#if !UNITY_EDITOR//https://cinrueom.tistory.com/79
 		if (focusWindow)
 		{
 			SetWindowLong (hwnd, -20, ~(((uint)524288) | ((uint)32)));
-			SetWindowPos(hwnd, HWND_TOPMOST, windowRect.Left, windowRect.Top, fWidth, fHeight, 32 | 64);
+			SetWindowPos(hwnd, HWND_TOPMOST, windowRect.Left, windowRect.Top, fWidth, fHeight, 32 | 64);//핸들
 		}
 		else
 		{
-			SetWindowLong(hwnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
+			SetWindowLong(hwnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);//첫번째 항은 변경을 하고자 하는 핸들,새로운 윈도우 스타일을 설정,팟업 또는 비지블
 			SetWindowLong (hwnd, -20, (uint)524288 | (uint)32);
 			SetLayeredWindowAttributes (hwnd, 0, 255, 2);
 			SetWindowPos(hwnd, HWND_TOPMOST, windowRect.Left, windowRect.Top, fWidth, fHeight, 32 | 64);
@@ -185,3 +185,5 @@ public class TransparentWindow : MonoBehaviour
 
 //별도 파일로 win32에대한 공부 내용을 정리하도록 하겠다.
 //SetMapMode와 논리 좌표: 윈도우즈 내부에서 사용되는 좌표를 말한다. 물리 좌표는 실제 화면에 출력되는 좌표이며 픽셀 단위를 사용한다. 모니터의 물리적인 픽셀 단위를 사용하므로 물리 좌표는 그 위치가 정해져 있다.
+//public Resolution[] Resolutions 으로 해당 기기의 해상도를 가지고 있는 배열
+//Resolutions = Screen.resolutions; 배열에 해당 스크린이 설정 가능한 해상도를 전부 받아온다.
