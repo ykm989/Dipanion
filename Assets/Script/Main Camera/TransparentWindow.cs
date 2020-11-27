@@ -125,7 +125,7 @@ public class TransparentWindow : MonoBehaviour
 	}
 
 	//Returns true if the cursor is over a UI element or 2D physics object
-	bool FocusForInput()
+	public bool FocusForInput()//OverlapPoint를 SetClickThrough()로 넘기기 위한 함수
 	{
 		EventSystem eventSystem = EventSystem.current;
 		if (eventSystem && eventSystem.IsPointerOverGameObject())//IsPointerOverGameObject()는 UI에ㅐ 캐릭터가 가려져서 선택 안되는거 방지
@@ -134,7 +134,7 @@ public class TransparentWindow : MonoBehaviour
 		}
 
 		Vector2 pos = Camera.ScreenToWorldPoint(Input.mousePosition);//마우스 클릭 또는 손카락 터치에 의한 입력이 발생했을 때, ScreenToWorld
-		return Physics2D.OverlapPoint(pos, clickLayerMask);//마우스 좌표와 특정 마스크와 겹치는지 확인
+		return Physics2D.OverlapPoint(pos, clickLayerMask);//첫번째 충돌한 오브젝트의 정보를 넘김
 	}
 
 	void SetClickThrough()
@@ -144,7 +144,7 @@ public class TransparentWindow : MonoBehaviour
 		//Get window position
 		GetWindowRect(hwnd, out windowRect);
 
-#if !UNITY_EDITOR//https://cinrueom.tistory.com/79
+#if !UNITY_EDITOR//https://cinrueom.tistory.com/79 유니티 환경이; 아닌 즉 exe로 실행될떄를 말하는듯
 		if (focusWindow)
 		{
 			SetWindowLong (hwnd, -20, ~(((uint)524288) | ((uint)32)));
@@ -154,18 +154,19 @@ public class TransparentWindow : MonoBehaviour
 		{
 			SetWindowLong(hwnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);//첫번째 항은 변경을 하고자 하는 핸들,새로운 윈도우 스타일을 설정,팟업 또는 비지블
 			SetWindowLong (hwnd, -20, (uint)524288 | (uint)32);
-			SetLayeredWindowAttributes (hwnd, 0, 255, 2);
+			SetLayeredWindowAttributes (hwnd, 0, 255, 2);//창의 투명도를 설정! 인자는 각각 핸들,바꾸려는 색(0이면 전부), 색의 투명도, 플래그 2면 bAlpha 를 사용 하여 계층화 된 창의 불투명돌을 결정, 투명 색상으로 crKey를 사용(인수 : hwnd,crkey,bAlpha,dwFlages)
 			SetWindowPos(hwnd, HWND_TOPMOST, windowRect.Left, windowRect.Top, fWidth, fHeight, 32 | 64);
 		}
 #endif
 	}
+	//https://kin.naver.com/qna/detail.nhn?d1id=1&dirId=1040102&docId=346625614&qb=U2V0V2luZG93TG9uZw==&enc=utf8&section=kin.ext&rank=6&search_sort=0&spq=0
 
 	public static void DragWindow()
 	{
 #if !UNITY_EDITOR
-		if (Screen.fullScreenMode != FullScreenMode.Windowed)
+		if (Screen.fullScreenMode != FullScreenMode.Windowed)//풀스크린이 아니면
 		{
-			return;
+			return;//끝낸다 즉 풀스크린이 아닐 시 작동하는 코드를 만들고 싶은 듯
 		}
 		ReleaseCapture ();
 		SendMessage(Main.hwnd, WM_SYSCOMMAND, WM_MOUSE_MOVE, 0);

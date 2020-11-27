@@ -57,6 +57,31 @@ public class Status : MonoBehaviour
             else valmen = val;
         }
     }
+    public int strout
+    {
+        get { return str; }
+        set { str += value; }
+    }
+    public int dexout
+    {
+        get { return dex;}
+        set { dex += value; }
+    }
+    public int intout
+    {
+        get { return ints; }
+        set { ints += value; }
+    }
+    public int staout
+    {
+        get { return sta; }
+        set { sta += value; }
+    }
+    public int menout
+    {
+        get { return men; }
+        set { men += value; }
+    }
 
     void Start()
     {
@@ -68,7 +93,6 @@ public class Status : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.I)) currenthpget = -10;//테스트를 위해 누르면 피 달게 설정
         if (Input.GetKeyDown(KeyCode.O)) currenthpget = 10;//테스트를 위해 누르면 피 차게 설정
-        if (Input.GetMouseButton(0)) currenthpget = -10;
     }
     
     public void Initialize(float currentValue, float maxValue)//HP 설정
@@ -77,5 +101,10 @@ public class Status : MonoBehaviour
         currenthpget = currentValue;
         chafilhp = chacurhp / chamaxhp;
 
+        str = 10;
+        dex = 10;
+        ints = 10;
+        sta = 10;
+        men = 10;
     }
 }
