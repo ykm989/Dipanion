@@ -62,21 +62,43 @@ public class Status : MonoBehaviour
         get { return str; }
         set { str += value; }
     }
+
     public int dexout
     {
         get { return dex;}
         set { dex += value; }
     }
+
     public int intout
     {
         get { return ints; }
         set { ints += value; }
     }
+
     public int staout
     {
         get { return sta; }
         set { sta += value; }
     }
+
+    public int aggout
+    {
+        get { return valagg; }
+        set { valagg += value; }
+    }
+
+    public int actout
+    {
+        get { return valact; }
+        set { valact += value; }
+    }
+
+    public int morout
+    {
+        get { return valmor; }
+        set { valmor += value; }
+    }
+
     public int menout
     {
         get { return men; }
@@ -88,7 +110,6 @@ public class Status : MonoBehaviour
         Initialize(100, 100);//처음 체력을 설정
     }
 
-  
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.I)) currenthpget = -10;//테스트를 위해 누르면 피 달게 설정

@@ -11,11 +11,24 @@ public class Character_Move : MonoBehaviour
     private float action = 1.0f; //움직일지 말지를 트랜지션으로 보내는 용도.
     private int cnt = 0; //최소한의 행동후 방향 변경
     private Animator anim; //애니메이터를 불러오기 위한 변수
+    Status status; //Status.cs 스크립트에 변수들을 가져오기 위함.
+    int agg; //공격성
+    int act; //행동성
+    int mor; //도덕성
+    int men; //멘탈
 
     void Start()
     {
         speed = 1.0f;
-        
+
+        status = GameObject.Find("Dipanion").GetComponent<Status>();
+
+        agg = status.aggout; //공격성
+        act = status.actout; //행동성
+        mor = status.morout; //도덕성
+        men = status.menout; //멘탈
+        //status.menout = 6;
+
         anim = GetComponent<Animator>();
         ran1 = Random.Range(-1.0f, 1.0f);
         if(ran1 > 0f)
@@ -34,8 +47,8 @@ public class Character_Move : MonoBehaviour
         cnt++;
         if (cnt > 300) //Update 함수가 300번 호출되면 방향을 방향을 바꿀지 말지 한번 돌려봄.
         {
-            ran2 = Random.Range(-1.0f, 1.0f);
-            if (ran2 > 0f)
+            ran2 = Random.Range(1f, 10f);
+            if (ran2 <= agg) //예를들어 agg가 7이면 1~10중 뽑는 ran2가 7보다 아하일 경우(즉 70%) 움직임.
             {
                 ran1 = Random.Range(-1.0f, 1.0f);
                 if (ran1 > 0f)
