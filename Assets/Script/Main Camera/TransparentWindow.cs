@@ -184,6 +184,8 @@ public class TransparentWindow : MonoBehaviour
 		public int Right;
 		public int Bottom;
 	}
+
+	
 }
 
 //별도 파일로 win32에대한 공부 내용을 정리하도록 하겠다.
