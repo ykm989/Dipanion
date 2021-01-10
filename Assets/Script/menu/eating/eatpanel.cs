@@ -18,25 +18,17 @@ public class eatpanel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //gameObject.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => st.satietyout = 10);
-        //if (SystemInput.GetMouseButtonUp(0)) gameObject.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => eatingbutton(10));
 
     }
 
-    /*private void eating(int eat)
-    {
-        Debug.Log("발동");
-        st.satietyout = eat;
-        float aasdfas = st.satietyout;
-        Debug.Log(aasdfas);
-    }*/
+ 
 
     public void eating()
     {
         Debug.Log("꺼억");
         st.satietyout = 10;
     }
-    public IEnumerable eatingbutton(int eat)
+    /*public IEnumerable eatingbutton(int eat)
     {
         Debug.Log("먹기 발동");
 
@@ -44,6 +36,6 @@ public class eatpanel : MonoBehaviour
 
         st.satietyout = eat;
         Debug.Log(st.satietyout);
-    }
+    }*/
 
 }
