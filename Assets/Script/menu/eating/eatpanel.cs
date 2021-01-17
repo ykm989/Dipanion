@@ -8,11 +8,15 @@ public class eatpanel : MonoBehaviour
     private bool ButtonDown;
     Status st;
 
+    int i; //test
+
     // Start is called before the first frame update
     void Start()
     {
         gameObject.SetActive(false);
         st = GameObject.Find("Dipanion").GetComponent<Status>();
+
+        i = 0;
     }
 
     // Update is called once per frame
@@ -21,7 +25,10 @@ public class eatpanel : MonoBehaviour
 
     }
 
- 
+    
+
+    
+     
 
     public void eating()
     {

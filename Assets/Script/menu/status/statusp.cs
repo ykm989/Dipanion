@@ -7,10 +7,14 @@ public class statusp : MonoBehaviour
 {
     Text text, holimoli;
     Status st;
+    GameObject dipanionobject;
+
+    Image dipanionviewimage;
     // Start is called before the first frame update
     void Start()
     {
-        st = GameObject.Find("Dipanion").GetComponent<Status>();
+        dipanionobject = GameObject.Find("Dipanion");
+        st = dipanionobject.GetComponent<Status>();
         gameObject.SetActive(false);
     }
 
@@ -31,5 +35,8 @@ public class statusp : MonoBehaviour
         gameObject.transform.GetChild(6).gameObject.GetComponent<Text>().text = "기분 : " + "살.려.줘";
         gameObject.transform.GetChild(7).gameObject.GetComponent<Text>().text = "공복도 : " + st.satietyout.ToString();
         gameObject.transform.GetChild(8).gameObject.GetComponent<Text>().text = st.levelout.ToString();//level
+
+        Sprite dipanionsprite = dipanionobject.gameObject.GetComponent<SpriteRenderer>().sprite;
+        gameObject.transform.GetChild(10).gameObject.GetComponent<Image>().sprite = dipanionsprite;
     }
 }
