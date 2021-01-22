@@ -93,6 +93,21 @@ public class Status : MonoBehaviour
         get { return level; }
         set { level += value; }
     }
+    public int aggout
+    {
+        get { return valagg; }
+        set { valagg += value; }
+    }
+    public int actout
+    {
+        get { return valact; }
+        set { valact += value; }
+    }
+    public int morout
+    {
+        get { return valmor; }
+        set { valmor += value; }
+    }
 
     void Start()
     {
