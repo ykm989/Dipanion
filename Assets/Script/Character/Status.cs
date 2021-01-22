@@ -9,6 +9,7 @@ public class Status : MonoBehaviour
 
     private Image content;
 
+    private int satiety = 0;
     private float chamaxhp;//캐릭터 HP 최대치
     private float chacurhp;//캐릭터 HP 현재
     public float chafilhp;//캐릭터 HP MAX/Current 계산을 저장하기 위한 변수
@@ -29,7 +30,7 @@ public class Status : MonoBehaviour
     }
     private int str, dex, ints, sta, men;//힘,민첩,지능,체력,정신력
     private int valagg, valact, valmor, valmen;//공격성 수치, 행동성 수치, 도덕성 수치, 멘탈 수치
-
+    private int level, exp;
     public void valper(int val, char a)//수치 값 변경 함수
     {
         if (a == 'g')//공격성
@@ -62,47 +63,35 @@ public class Status : MonoBehaviour
         get { return str; }
         set { str += value; }
     }
-
+    public int satietyout
+    {
+        get { return satiety; }
+        set { satiety = satiety + value; }
+    }
     public int dexout
     {
         get { return dex;}
         set { dex += value; }
     }
-
     public int intout
     {
         get { return ints; }
         set { ints += value; }
     }
-
     public int staout
     {
         get { return sta; }
         set { sta += value; }
     }
-
-    public int aggout
-    {
-        get { return valagg; }
-        set { valagg += value; }
-    }
-
-    public int actout
-    {
-        get { return valact; }
-        set { valact += value; }
-    }
-
-    public int morout
-    {
-        get { return valmor; }
-        set { valmor += value; }
-    }
-
     public int menout
     {
         get { return men; }
         set { men += value; }
+    }
+    public int levelout
+    {
+        get { return level; }
+        set { level += value; }
     }
 
     void Start()
@@ -110,6 +99,7 @@ public class Status : MonoBehaviour
         Initialize(100, 100);//처음 체력을 설정
     }
 
+  
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.I)) currenthpget = -10;//테스트를 위해 누르면 피 달게 설정
@@ -123,9 +113,11 @@ public class Status : MonoBehaviour
         chafilhp = chacurhp / chamaxhp;
 
         str = 10;
-        dex = 10;
-        ints = 10;
-        sta = 10;
-        men = 10;
+        dex = 11;
+        ints = 12;
+        sta = 13;
+        men = 14;
+        satiety = 15;
+        level = 1;
     }
 }

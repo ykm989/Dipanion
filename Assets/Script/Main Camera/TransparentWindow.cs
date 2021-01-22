@@ -24,14 +24,15 @@ public class TransparentWindow : MonoBehaviour
 	[Tooltip("Should the window be fullscreen?")] //전체화면인가?
 	[SerializeField] bool fullscreen = true;
 
-	[Tooltip("Force the window to match ScreenResolution")] //윈도우가 화면 해상도와 일치하도록 강제 설정
+	[Tooltip("Force the window to match ScreenResolution")] //윈도우가 화면 해상도와 일치하는가?
 	[SerializeField] bool customResolution = true;
 
 	[Tooltip("Resolution the overlay should run at")] //오버레이가 실행되어야하는 해상도
-	[SerializeField] Vector2Int screenResolution = new Vector2Int(2560, 1440);//요걸 1280720에서 25601440로 수정 테스트
+	[SerializeField] Vector2Int screenResolution = new Vector2Int(1280, 720);//요걸 1280720에서 25601440로 수정 테스트
 
 	[Tooltip("The framerate the overlay should try to run at")] //오버레이가 실행되어야하는 프레임 속도
 	[SerializeField] int targetFrameRate = 30;
+
 
 	
 	/////////////////////
@@ -85,11 +86,12 @@ public class TransparentWindow : MonoBehaviour
 
 		Camera = GetComponent<Camera>();
 		Camera.backgroundColor = new Color();//남은 색 설정, 색 설정이 안됨
-		Camera.clearFlags = CameraClearFlags.SolidColor;//배경색으로 화면의 나머지 부분을 채웁니다.
+		Camera.clearFlags = CameraClearFlags.SolidColor;//배경색으로 화면의 나머지 부분을 채웁니다. 즉 빈공간을 단색으로 칠한다.
 
-		if (fullscreen && !customResolution)
+		if ((screenResolution.x != Screen.currentResolution.width) || (screenResolution.y != Screen.currentResolution.height))  customResolution = false;
+		if (fullscreen && !customResolution)//화면의 해상도를 load 해둔게 아니라 흐음
 		{
-			screenResolution = new Vector2Int(Screen.currentResolution.width, Screen.currentResolution.height);//스크린 해상도 값을 전달
+			screenResolution = new Vector2Int(Screen.currentResolution.width, Screen.currentResolution.height);//스크린 해상도 값을 전달, currentResolution.height 는 현재의 화면 해상도를 나타냄
 		}
 		
 		Screen.SetResolution(screenResolution.x, screenResolution.y, fullscreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed);
@@ -127,7 +129,7 @@ public class TransparentWindow : MonoBehaviour
 	//Returns true if the cursor is over a UI element or 2D physics object
 	public bool FocusForInput()//OverlapPoint를 SetClickThrough()로 넘기기 위한 함수
 	{
-		EventSystem eventSystem = EventSystem.current;
+		EventSystem eventSystem = EventSystem.current;//현재 EventSystem을 반환
 		if (eventSystem && eventSystem.IsPointerOverGameObject())//IsPointerOverGameObject()는 UI에ㅐ 캐릭터가 가려져서 선택 안되는거 방지
 		{
 			return true;
@@ -145,9 +147,9 @@ public class TransparentWindow : MonoBehaviour
 		GetWindowRect(hwnd, out windowRect);
 
 #if !UNITY_EDITOR//https://cinrueom.tistory.com/79 유니티 환경이; 아닌 즉 exe로 실행될떄를 말하는듯
-		if (focusWindow)
+		if (focusWindow)//
 		{
-			SetWindowLong (hwnd, -20, ~(((uint)524288) | ((uint)32)));
+			SetWindowLong (hwnd, -20, ~(((uint)524288) | ((uint)32)));//두 번째 인자에 -20이 들어간다는건 새 확장 창 스타일을 설정한다는 의미
 			SetWindowPos(hwnd, HWND_TOPMOST, windowRect.Left, windowRect.Top, fWidth, fHeight, 32 | 64);//핸들
 		}
 		else
@@ -160,19 +162,19 @@ public class TransparentWindow : MonoBehaviour
 #endif
 	}
 	//https://kin.naver.com/qna/detail.nhn?d1id=1&dirId=1040102&docId=346625614&qb=U2V0V2luZG93TG9uZw==&enc=utf8&section=kin.ext&rank=6&search_sort=0&spq=0
-
+	/*
 	public static void DragWindow()
 	{
 #if !UNITY_EDITOR
-		if (Screen.fullScreenMode != FullScreenMode.Windowed)//풀스크린이 아니면
+		if (Screen.fullScreenMode != FullScreenMode.Windowed)//풀 스크린이면 최대치 창 크기와 같은지 아니면 창모드면 최대치와 같을지 확인
 		{
 			return;//끝낸다 즉 풀스크린이 아닐 시 작동하는 코드를 만들고 싶은 듯
 		}
-		ReleaseCapture ();
+		ReleaseCapture ();//
 		SendMessage(Main.hwnd, WM_SYSCOMMAND, WM_MOUSE_MOVE, 0);
 		Input.ResetInputAxes();
 #endif		
-	}
+	}*/
 
 	[StructLayout(LayoutKind.Sequential)]
 	public struct Rectangle
@@ -182,6 +184,8 @@ public class TransparentWindow : MonoBehaviour
 		public int Right;
 		public int Bottom;
 	}
+
+	
 }
 
 //별도 파일로 win32에대한 공부 내용을 정리하도록 하겠다.

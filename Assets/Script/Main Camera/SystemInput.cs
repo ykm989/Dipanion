@@ -8,9 +8,9 @@ public class SystemInput
 	//TODO: Add Keyboard input (see bottom of script)
 	
 	//Keys
-	const int VK_LBUTTON = 0x01; //Left Mouse Button
-	const int VK_RBUTTON = 0x02; //Right Mouse Button
-	const int VK_MBUTTON = 0x02; //Middle Mouse Button (Mouse wheel button)
+	const int VK_LBUTTON = 0x01; //마우스 좌클릭
+	const int VK_RBUTTON = 0x02; //마우스 우클릭
+	const int VK_MBUTTON = 0x02; //마우스 가운데 클릭
 	const int SM_SWAPBUTTON = 23; //0 = default, non-zero = LMB/RMB swapped
 
 	//Key states
@@ -33,11 +33,11 @@ public class SystemInput
 	public static extern short GetSystemMetrics(int metricsCode);
 
 	//TODO: Work out a way to handle generic key states, so we don't need multiple bools for each key 
-	static bool mouseButton0Down = false;
+	static bool mouseButton0Down = false;//버튼이 들어가 있는가?
 	static bool mouseButton1Down = false;
 	static bool lastMouseButton0Down = false;
 	static bool lastMouseButton1Down = false;
-	static bool hasPressedButton0 = false;
+	static bool hasPressedButton0 = false;//버튼이 눌려져 있는가?
 	static bool hasPressedButton1 = false;
 
 	/// <summary>
@@ -116,15 +116,15 @@ public class SystemInput
 		}
 	}
 
-	static bool MouseButtonPressed(int button)
+	static bool MouseButtonPressed(int button)//마우스 누르고 있는지 확인
 	{
 		bool state = false;
-		bool swapped = GetSystemMetrics(SM_SWAPBUTTON) > 0;
+		bool swapped = GetSystemMetrics(SM_SWAPBUTTON) > 0;//왼쪽 우측 마우스 클릭(왼손잡이용 마우스!)이 반전 됬는지 확인하는 함수
 		switch (button)
 		{
 			case 0:
 				state = GetAsyncKeyState(swapped ? VK_RBUTTON : VK_LBUTTON) == BUTTONDOWN;
-				break;
+				break;//왼손잡이용으로 바뀌면 뭘 받아올지 설정해둔거임
 			case 1:
 				state = GetAsyncKeyState(swapped ? VK_LBUTTON : VK_RBUTTON) == BUTTONDOWN;
 				break;
