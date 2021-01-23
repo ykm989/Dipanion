@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
 
 public class Character_Move : MonoBehaviour
 {
@@ -24,6 +25,10 @@ public class Character_Move : MonoBehaviour
         status = GameObject.Find("Dipanion").GetComponent<Status>();
 
         agg = status.aggout; //공격성
+<<<<<<< Updated upstream
+=======
+        agg = 7; //임시
+>>>>>>> Stashed changes
         act = status.actout; //행동성
         mor = status.morout; //도덕성
         men = status.menout; //멘탈
@@ -73,7 +78,37 @@ public class Character_Move : MonoBehaviour
 
         anim.SetFloat("MoveX", direction); //트렌지션에 MoveX라는 변수에 direction값을 보냄.
         anim.SetFloat("Action", action);
+<<<<<<< Updated upstream
 
+=======
+        ///////////////////////////////////////////////
+        if(Input.GetKeyDown(KeyCode.A))
+        {
+            anim.SetInteger("Eat", 1);
+        }
+        else if(Input.GetKeyUp(KeyCode.A))
+        {
+            anim.SetInteger("Eat", -1);
+        }
+
+        if(anim.GetCurrentAnimatorStateInfo(0).IsName("Eat"))
+        {
+            speed = 0.0f;
+            anim.SetFloat("Action", -1.0f);
+        }
+        if (action > 0)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Move_R Anim"))
+            {
+                speed = 1.0f;
+            }
+            else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Move_L Anim"))
+            {
+                speed = 1.0f;
+            }
+        }
+        /////////////////////////////////////////////////
+>>>>>>> Stashed changes
         transform.Translate(new Vector3(direction * speed * Time.deltaTime, 0f, 0f)); //움직이기
 
         Vector3 vp = Camera.main.WorldToViewportPoint(this.transform.position);
